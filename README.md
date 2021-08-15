@@ -12,4 +12,10 @@ To start the Phoenix server:
   * Install dependencies with `mix deps.get`
   * Start Phoenix endpoint with `mix phx.server`
 
-The basic route that serves two example sites is at [`localhost:5000/api/fetch`](http://localhost:5000/api/fetch)
+The basic route that serves some example sites is at:
+* [`localhost:5000/api/fetch`](http://localhost:5000/api/fetch)
+
+There is also the Phoenix Live Dashboard at:
+* [`localhost:5000/dashboard`](http://localhost:5000/dashboard)
+
+### Production Deployment (TODO)
