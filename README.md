@@ -3,8 +3,8 @@
 A really simple API that serves a json list of sites to be blocked 
 by the [chrome extension](https://github.com/dimspith/fn-blacklist).
 
-### Dependencies
-  * [elixir](https://elixir-lang.org/install.html)
+### Installing
+Follow the [official guide](https://hexdocs.pm/phoenix/installation.html) to install Phoenix
 
 ### Running
 To start the Phoenix server:
