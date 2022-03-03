@@ -5,7 +5,6 @@ defmodule FnApiWeb.FetchBlacklist do
   alias FnApi.Blacklist
 
   def index(conn, _params) do
-    send_file(conn, 200, "priv/lists/list.json")
-    json(conn, Jason.encode!(%{"sites" => Repo.all(from(i in Blacklist, select: i.domain))}))
+    json(conn, %{"sites" => Repo.all(from(i in Blacklist, select: i.domain)) |> Enum.sort()})
   end
 end
