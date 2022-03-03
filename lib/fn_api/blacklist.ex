@@ -1,4 +1,4 @@
-defmodule FnApi.List do
+defmodule FnApi.Blacklist do
   use Ecto.Schema
   import Ecto.Changeset
 

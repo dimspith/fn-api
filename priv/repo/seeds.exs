@@ -9,3 +9,12 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias FnApi.Repo
+
+list =
+  File.read!("priv/lists/list")
+  |> String.split("\n", trim: true)
+  |> Enum.sort()
+
+Enum.each(list, fn (domain) -> Repo.insert!(%FnApi.Blacklist{domain: domain}) end)
