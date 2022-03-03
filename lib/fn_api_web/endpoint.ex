@@ -7,12 +7,8 @@ defmodule FnApiWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_fn_api_key",
-    signing_salt: "DJ8pjpzU"
+    signing_salt: "zUjRTtye"
   ]
-
-  socket "/socket", FnApiWeb.UserSocket,
-    websocket: true,
-    longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
@@ -24,12 +20,13 @@ defmodule FnApiWeb.Endpoint do
     at: "/",
     from: :fn_api,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(assets fonts images favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
     plug Phoenix.CodeReloader
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :fn_api
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

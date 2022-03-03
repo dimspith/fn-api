@@ -27,3 +27,7 @@ fn_api-*.tar
 # this depending on your deployment strategy.
 /priv/static/
 /mix.lock
+/lib/fn_api/repo.ex
+/db/*
+/priv/lists/*
+/priv/repo/*.db
