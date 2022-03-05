@@ -1,5 +1,9 @@
 defmodule FnApi.FileWatcher do
   use GenServer
+  import Ecto.Query
+  alias FnApi.Repo
+  alias FnApi.Blacklist
+  
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args)

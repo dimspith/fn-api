@@ -3,6 +3,7 @@ defmodule FnApi.Tokens do
   import Ecto.Changeset
 
   schema "tokens" do
+    field :fullName, :string
     field :token, :string
 
     timestamps()
@@ -11,7 +12,7 @@ defmodule FnApi.Tokens do
   @doc false
   def changeset(tokens, attrs) do
     tokens
-    |> cast(attrs, [:token])
-    |> validate_required([:token])
+    |> cast(attrs, [:token, :fullName])
+    |> validate_required([:token, :fullName])
   end
 end

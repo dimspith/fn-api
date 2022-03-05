@@ -5,6 +5,8 @@ defmodule FnApiWeb.FetchLastUpdate do
   alias FnApi.Blacklist
 
   def index(conn, _params) do
-    json(conn, %{"sites" => Repo.all(from(i in Blacklist, select: i.domain)) |> Enum.sort()})
+    json(conn, %{"lastupdate" => File.read!("priv/lists/lastupdate")
+                 |> String.trim()
+                 |> String.to_integer()})
   end
 end
