@@ -5,8 +5,6 @@ defmodule FnApi.Tokens do
   schema "tokens" do
     field :fullName, :string
     field :token, :string
-
-    timestamps()
   end
 
   @doc false
@@ -14,5 +12,6 @@ defmodule FnApi.Tokens do
     tokens
     |> cast(attrs, [:token, :fullName])
     |> validate_required([:token, :fullName])
+    |> unique_constraint([:token])
   end
 end

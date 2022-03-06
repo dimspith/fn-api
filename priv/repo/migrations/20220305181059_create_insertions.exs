@@ -5,8 +5,7 @@ defmodule FnApi.Repo.Migrations.CreateInsertions do
     create table(:insertions) do
       add :domain, :string
       add :date, :integer
-
-      timestamps()
     end
+    create unique_index(:insertions, [:domain])
   end
 end

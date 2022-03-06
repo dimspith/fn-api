@@ -4,8 +4,8 @@ defmodule FnApi.Repo.Migrations.CreateTokens do
   def change do
     create table(:tokens) do
       add :token, :string
-
-      timestamps()
+      add :fullName, :string
     end
+    create unique_index(:tokens, [:token])
   end
 end

@@ -5,8 +5,7 @@ defmodule FnApi.Repo.Migrations.CreateDeletions do
     create table(:deletions) do
       add :domain, :string
       add :date, :integer
-
-      timestamps()
     end
+    create unique_index(:deletions, [:domain])
   end
 end

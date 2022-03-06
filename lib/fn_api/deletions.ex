@@ -5,8 +5,6 @@ defmodule FnApi.Deletions do
   schema "deletions" do
     field :date, :integer
     field :domain, :string
-
-    timestamps()
   end
 
   @doc false
@@ -14,5 +12,6 @@ defmodule FnApi.Deletions do
     deletions
     |> cast(attrs, [:domain, :date])
     |> validate_required([:domain, :date])
+    |> unique_constraint(:domain, name: :deletions_domain_index)
   end
 end
