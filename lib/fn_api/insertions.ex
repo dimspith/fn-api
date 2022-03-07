@@ -12,6 +12,5 @@ defmodule FnApi.Insertions do
     insertions
     |> cast(attrs, [:domain, :date])
     |> validate_required([:domain, :date])
-    |> unique_constraint(:domain, name: :insertions_domain_index)
   end
 end

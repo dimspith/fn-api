@@ -6,6 +6,5 @@ defmodule FnApi.Repo.Migrations.CreateInsertions do
       add :domain, :string
       add :date, :integer
     end
-    create unique_index(:insertions, [:domain])
   end
 end
