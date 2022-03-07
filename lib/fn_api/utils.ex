@@ -117,7 +117,7 @@ defmodule FnApi.Utils do
     common =
       MapSet.intersection(
         MapSet.new(to_delete),
-        MapSet.new(Map.get(diff, :deletions))
+        MapSet.new(Map.get(diff, :insertions))
       )
       |> MapSet.to_list()
 
@@ -170,5 +170,13 @@ defmodule FnApi.Utils do
         end
       diff
     end)
+  end
+
+  def get_last_update() do
+    lastupdate = Repo.all(from c in Checkpoints, select: max(c.date))
+    case lastupdate do
+      nil -> 0
+      _ -> lastupdate
+    end
   end
 end

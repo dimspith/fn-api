@@ -2,16 +2,9 @@ defmodule FnApiWeb.FetchLastUpdate do
   use FnApiWeb, :controller
   import Ecto.Query
   alias FnApi.{Insertions, Deletions, Repo}
+  import FnApi.Utils
 
   def index(conn, _params) do
-    json(conn, %{
-      "lastupdate" =>
-        hd(
-          max(
-            Repo.all(from i in Insertions, select: max(i.date)),
-            Repo.all(from d in Deletions, select: max(d.date))
-          )
-        )
-    })
+    json(conn, %{"lastupdate" => get_last_update()})
   end
 end

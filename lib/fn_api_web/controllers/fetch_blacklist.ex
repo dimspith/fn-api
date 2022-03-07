@@ -20,7 +20,7 @@ defmodule FnApiWeb.FetchBlacklist do
         IO.inspect(diff)
 
         json(conn, %{
-          "lastupdate" => date,
+          "lastupdate" => get_last_update(),
           "insertions" => Map.get(diff, :insertions),
           "deletions" => Map.get(diff, :deletions)
         })
