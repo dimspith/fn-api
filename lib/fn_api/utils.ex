@@ -161,7 +161,9 @@ defmodule FnApi.Utils do
 
     File.write!(
       "priv/lists/blacklist",
-      diff[:insertions] |> Enum.map(fn x -> x <> "\n" end)
+      diff[:insertions]
+      |> Enum.map(fn x -> x <> "\n" end)
+      |> Enum.sort()
     )
   end
 
