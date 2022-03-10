@@ -15,7 +15,6 @@ defmodule FnApiWeb.FetchBlacklist do
     case Integer.parse(unix_time) do
       {date, _} ->
         diff = generate_diff(date)
-        IO.inspect(diff)
 
         json(conn, %{
           "lastupdate" => get_last_update(),

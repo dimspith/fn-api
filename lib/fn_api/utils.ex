@@ -29,9 +29,8 @@ defmodule FnApi.Utils do
           end
         end)
 
-      # Insert checkpoint to DB
       datetime = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
-      Repo.insert(%Checkpoints{date: datetime})
+
 
       # Add all changes to Insertions table
       Enum.map(Map.fetch!(changes, :add), fn x ->
@@ -40,7 +39,7 @@ defmodule FnApi.Utils do
           |> Insertions.changeset(%{domain: x, date: datetime})
 
         case Repo.insert(changes) do
-          {:ok, _} -> IO.puts("Insertion successful!")
+          {:ok, _} -> nil
           {:error, _} -> IO.puts("Error: Insertion failed!")
         end
       end)
@@ -52,11 +51,15 @@ defmodule FnApi.Utils do
           |> Deletions.changeset(%{domain: x, date: datetime})
 
         case Repo.insert(changes) do
-          {:ok, _} -> IO.puts("Insertion successful!")
+          {:ok, _} -> nil
           {:error, _} -> IO.puts("Error: Insertion failed!")
         end
       end)
 
+      # Insert Checkpoint to DB
+      Repo.insert(%Checkpoints{date: datetime})
+
+      IO.puts("Domains inserted to DB Successfully!")
       {:ok, :success}
     end
   end
@@ -137,7 +140,6 @@ defmodule FnApi.Utils do
                 diff,
                 to_insert
                 |> Enum.map(&elem(&1, 0))
-                |> IO.inspect(label: "Insert:")
                 |> Kernel.--(diff[:insertions]),
                 :insertions
               )
@@ -152,7 +154,6 @@ defmodule FnApi.Utils do
               diff,
               to_delete
               |> Enum.map(&elem(&1, 0))
-              |> IO.inspect(label: "Delete:")
               |> Kernel.--(diff[:deletions]),
               :deletions
             )
@@ -200,7 +201,6 @@ defmodule FnApi.Utils do
               diff,
               to_insert
               |> Enum.map(&elem(&1, 0))
-              |> IO.inspect(label: "Insert (date):")
               |> Kernel.--(diff[:insertions]),
               :insertions
             )
@@ -216,7 +216,6 @@ defmodule FnApi.Utils do
               diff,
               to_delete
               |> Enum.map(&elem(&1, 0))
-              |> IO.inspect(label: "Delete (date):")
               |> Kernel.--(diff[:deletions]),
               :deletions
             )
