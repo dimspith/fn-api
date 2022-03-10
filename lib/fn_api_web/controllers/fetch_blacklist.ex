@@ -7,6 +7,7 @@ defmodule FnApiWeb.FetchBlacklist do
       "sites" =>
         File.read!("priv/lists/blacklist")
         |> String.split("\n")
+        |> (fn list -> List.delete_at(list, length(list)-1) end).()
         |> Enum.sort()
     })
   end
