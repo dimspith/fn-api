@@ -4,11 +4,8 @@ defmodule FnApi.FileWatcher do
   When changes occur, it fetches the additions and removals from the file and commits them to the database.
   Also generates a file containing the latest list on each change.
   """
-
   use GenServer
-  import Ecto.Query
   import FnApi.Utils
-  alias FnApi.{Repo, Insertions, Deletions, Checkpoints}
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args)

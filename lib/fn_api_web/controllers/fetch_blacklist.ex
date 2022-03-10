@@ -1,7 +1,5 @@
 defmodule FnApiWeb.FetchBlacklist do
   use FnApiWeb, :controller
-  import Ecto.Query
-  alias FnApi.{Insertions, Deletions, Repo}
   import FnApi.Utils
 
   def send_all(conn) do
