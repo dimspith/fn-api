@@ -12,8 +12,7 @@ defmodule FnApi.FileWatcher do
   def init(args) do
     {:ok, watcher_pid} = FileSystem.start_link(args)
     FileSystem.subscribe(watcher_pid)
-
-    # generate_blacklist("priv/lists/blacklist")
+    generate_diff()
 
     {:ok, %{watcher_pid: watcher_pid}}
   end
@@ -22,7 +21,7 @@ defmodule FnApi.FileWatcher do
     if(Enum.member?(events, :closed)) do
       case fetch_changes(path) do
         {:error, _} -> :error
-        {:ok, _} -> generate_blacklist("priv/lists/blacklist")
+        {:ok, _} -> generate_diff()
       end
     end
 
