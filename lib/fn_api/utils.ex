@@ -232,7 +232,7 @@ defmodule FnApi.Utils do
 
     case lastupdate do
       nil -> 0
-      _ -> lastupdate
+      _ -> hd(lastupdate)
     end
   end
 end
