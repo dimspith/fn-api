@@ -222,6 +222,8 @@ defmodule FnApi.Utils do
         end
 
       diff
+      |> Map.update!(:insertions, &Enum.sort/1)
+      |> Map.update!(:deletions, &Enum.sort/1)
     end)
   end
 
