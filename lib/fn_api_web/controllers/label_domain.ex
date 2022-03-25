@@ -1,8 +1,8 @@
-defmodule FnApiWeb.MarkDomain do
+defmodule FnApiWeb.LabelDomain do
   use FnApiWeb, :controller
   
   # Convert plaintext list to json file
   def index(conn, params) do
-    json(conn, %{body: params})
+    json(conn, params)
   end
 end

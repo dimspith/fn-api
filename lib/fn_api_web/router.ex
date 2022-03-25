@@ -9,7 +9,7 @@ defmodule FnApiWeb.Router do
     pipe_through :api
     get "/fetch", FetchBlacklist, :index
     get "/latest", FetchLastUpdate, :index
-    post "/mark", MarkDomain, :index
+    post "/label", LabelDomain, :index
   end
 
   # Enables LiveDashboard only for development
