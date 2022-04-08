@@ -2,10 +2,9 @@ defmodule FnApi.Repo.Migrations.CreateTokens do
   use Ecto.Migration
 
   def change do
-    create table(:tokens) do
-      add :token, :string
+    create table(:tokens, primary_key: false) do
+      add :uuid, :uuid, primary_key: true
       add :fullName, :string
     end
-    create unique_index(:tokens, [:token])
   end
 end
