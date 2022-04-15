@@ -24,36 +24,39 @@ defmodule FnApi.Labelling do
         end)
         |> Enum.map(&String.trim_leading(&1, "tag-"))
 
-      # # Check if user has submitted this domain in the past
-      # last_label =
-      #   Repo.one(
-      #     from(l in Labels,
-      #       where: l.uuid == ^uuid and l.domain == ^params["domain"]
-      #     )
-      #   )
+      # Check if user has submitted this domain in the past
+      last_label =
+        Repo.one(
+          from(l in Labels,
+            where: l.uuid == ^uuid and l.domain == ^params["domain"]
+          )
+        )
 
-      # if(last_label) do
-      #   # Update label
-      #   updated_label =
-      #     Ecto.Changeset.change(last_label,
-      #       isFake: convert!(params["is-fake"]),
-      #       comments: params["comments"]
-      #     )
-      #   Repo.update!(updated_label)
+      # If the domain was already submitted by the user, replace the current label
+      if(last_label) do
+        # Update label
+        updated_label =
+          Ecto.Changeset.change(last_label,
+            isFake: convert!(params["is-fake"]),
+            comments: params["comments"]
+          )
 
-      #   # Update tags
+        Repo.update!(updated_label)
 
-      # else
-      # Insert label
-      Repo.insert!(
-        %Labels{
-          uuid: Ecto.UUID.dump!(params["token"]),
-          domain: params["domain"],
-          isFake: convert!(params["is-fake"]),
-          comments: params["comments"]
-        },
-        returning: false
-      )
+        # Delete tags
+        Repo.delete_all(from(t in Tags, where: t.uuid == ^uuid and t.domain == ^params["domain"]))
+      else
+        # Insert label
+        Repo.insert!(
+          %Labels{
+            uuid: Ecto.UUID.dump!(params["token"]),
+            domain: params["domain"],
+            isFake: convert!(params["is-fake"]),
+            comments: params["comments"]
+          },
+          returning: false
+        )
+      end
 
       # Insert Tags
       if(!Enum.empty?(tags)) do
@@ -75,8 +78,6 @@ defmodule FnApi.Labelling do
           domain: params["domain"],
           tag: params["bias"]
         })
-
-        # end
       end
 
       %{result: :success}
