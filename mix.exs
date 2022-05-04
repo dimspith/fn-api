@@ -56,6 +56,8 @@ defmodule FnApi.MixProject do
     [
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "sql.get_users": ["run --no-compile priv/repo/scripts/get_users.exs"], 
+      "sql.insert_user": ["run --no-compile priv/repo/scripts/insert_user.exs"], 
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]

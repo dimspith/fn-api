@@ -13,7 +13,7 @@ defmodule FnApi.Labelling do
       :error -> false
     end
   end
-
+  
   def db_insert_label(params) do
     if(valid_token?(params["token"])) do
       uuid = Ecto.UUID.dump!(params["token"])
