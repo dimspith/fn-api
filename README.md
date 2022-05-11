@@ -6,16 +6,14 @@ by the [chrome extension](https://github.com/dimspith/fn-blacklist).
 ### Installing
 Follow the [official guide](https://hexdocs.pm/phoenix/installation.html) to install Phoenix
 
-### Running
-To start the Phoenix server:
-
+### Running in Development Mode
+To start the server:
   * Install dependencies with `mix deps.get`
+  * Initialize database with `mix ecto.setup`
   * Start Phoenix endpoint with `mix phx.server`
+    * To start in interactive mode use `iex -S mix phx.server`
 
-The basic route that serves some example sites is at:
-* [`localhost:5000/api/fetch`](http://localhost:5000/api/fetch)
-
-There is also the Phoenix Live Dashboard at:
-* [`localhost:5000/dashboard`](http://localhost:5000/dashboard)
-
-### Production Deployment (TODO)
+### Running in Production Mode
+  * Install dependencies with `mix deps.get`
+  * Initialize database with `mix ecto.setup`
+  * Start Phoenix endpoint by runnint the script `./start_prod.sh`
