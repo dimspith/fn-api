@@ -12,7 +12,12 @@ import Config
 #config :fn_api, FnApiWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :warning
+
+config :fn_api, FnApi.Repo,
+  database: Path.expand("../db/fn_api_prod.db", Path.dirname(__ENV__.file)),
+  pool_size: 20,
+  queue_target: 5000
 
 # ## SSL Support
 #

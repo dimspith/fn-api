@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :fn_api, FnApi.Repo,
   database: Path.expand("../db/fn_api_dev.db", Path.dirname(__ENV__.file)),
-  pool_size: 10,
+  pool_size: 20,
   show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable

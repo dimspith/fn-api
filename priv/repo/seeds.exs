@@ -1,9 +1,10 @@
-# Script for populating the database. You can run it as:
+# Script for populating the database.
+# It is ran on database creation.
+# You can run it as:
 #
 #     mix run priv/repo/seeds.exs
 #
 
-import Ecto.Query
 alias FnApi.{Repo, Insertions, Checkpoints}
 
 curr_datetime = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
