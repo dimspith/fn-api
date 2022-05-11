@@ -16,4 +16,4 @@ To start the server:
 ### Running in Production Mode
   * Install dependencies with `mix deps.get`
   * Initialize database with `mix ecto.setup`
-  * Start Phoenix endpoint by runnint the script `./start_prod.sh`
+  * Start Phoenix endpoint by running the script `./start_prod.sh`
