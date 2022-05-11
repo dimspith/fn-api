@@ -2,19 +2,18 @@
 #
 #     mix run priv/repo/seeds.exs
 #
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     FnApi.Repo.insert!(%FnApi.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
 
-# alias FnApi.Repo
+import Ecto.Query
+alias FnApi.{Repo, Insertions, Checkpoints}
 
-# list =
-#   File.read!("priv/lists/list")
-#   |> String.split("\n", trim: true)
-#   |> Enum.sort()
+curr_datetime = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 
-# Enum.each(list, fn (domain) -> Repo.insert!(%FnApi.Blacklist{domain: domain}) end)
+File.stream!("priv/lists/default")|> Enum.each(fn domain ->
+  domain
+  |> String.trim()
+  |> (fn domain ->
+    Repo.insert!(%Insertions{domain: domain, date: curr_datetime})
+  end).()
+end)
+
+Repo.insert(%Checkpoints{date: curr_datetime})
