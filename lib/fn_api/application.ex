@@ -9,7 +9,7 @@ defmodule FnApi.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      FnApi.Repo,
+      FnApi.Database.Repo,
       # Start the filesystem watcher
       {FnApi.FileWatcher, dirs: ["priv/lists/changes"]},
       # Start the Telemetry supervisor

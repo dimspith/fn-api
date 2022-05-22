@@ -1,4 +1,4 @@
-defmodule FnApi.Tokens do
+defmodule FnApi.Database.Tokens do
   use Ecto.Schema
   import Ecto.Changeset
   

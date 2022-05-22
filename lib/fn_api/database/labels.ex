@@ -1,4 +1,4 @@
-defmodule FnApi.Labels do
+defmodule FnApi.Database.Labels do
   use Ecto.Schema
   import Ecto.Changeset
 

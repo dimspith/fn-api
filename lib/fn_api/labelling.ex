@@ -1,7 +1,7 @@
 defmodule FnApi.Labelling do
   import Ecto.Query
   require Ecto.UUID
-  alias FnApi.{Repo, Labels, Tokens, Tags}
+  alias FnApi.Database.{Repo, Labels, Tokens, Tags}
 
   def convert!("true"), do: true
   def convert!("false"), do: false

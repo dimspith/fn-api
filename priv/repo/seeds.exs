@@ -5,7 +5,7 @@
 #     mix run priv/repo/seeds.exs
 #
 
-alias FnApi.{Repo, Insertions, Checkpoints}
+alias FnApi.Database.{Repo, Insertions, Checkpoints}
 
 curr_datetime = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 

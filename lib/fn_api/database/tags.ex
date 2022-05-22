@@ -1,4 +1,4 @@
-defmodule FnApi.Tags do
+defmodule FnApi.Database.Tags do
   use Ecto.Schema
   import Ecto.Changeset
 

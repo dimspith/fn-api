@@ -4,7 +4,7 @@ defmodule FnApi.Utils do
   """
 
   import Ecto.Query
-  alias FnApi.{Repo, Insertions, Deletions, Checkpoints}
+  alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints}
 
   def fetch_changes(path) do
     ## Fetches all changes from `path` and inserts them to the Database.

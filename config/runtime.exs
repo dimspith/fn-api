@@ -20,7 +20,7 @@ if config_env() == :prod do
       For example: /etc/fn_api/fn_api.db
       """
 
-  config :fn_api, FnApi.Repo,
+  config :fn_api, FnApi.Database.Repo,
     database: database_path,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5")
 

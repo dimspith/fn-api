@@ -8,7 +8,7 @@
 import Config
 
 config :fn_api,
-  ecto_repos: [FnApi.Repo]
+  ecto_repos: [FnApi.Database.Repo]
 
 # Configures the endpoint
 config :fn_api, FnApiWeb.Endpoint,
