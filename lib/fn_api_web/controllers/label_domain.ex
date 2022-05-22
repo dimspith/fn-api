@@ -4,7 +4,7 @@ defmodule FnApiWeb.LabelDomain do
   
   # Convert plaintext list to json file
   def index(conn, params) do
-    res = db_insert_label(params)
+    res = insert_label(params)
     json(conn, res)
   end
 end

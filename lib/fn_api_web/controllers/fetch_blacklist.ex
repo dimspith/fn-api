@@ -1,6 +1,6 @@
 defmodule FnApiWeb.FetchBlacklist do
   use FnApiWeb, :controller
-  import FnApi.Utils
+  import FnApi.Database.Updates
 
   def send_all(conn) do
     json(conn, %{
@@ -19,8 +19,8 @@ defmodule FnApiWeb.FetchBlacklist do
 
         json(conn, %{
           "lastupdate" => get_last_update(),
-          "insertions" => Map.get(diff, :insertions),
-          "deletions" => Map.get(diff, :deletions)
+          "insertions" => diff[:insertions],
+          "deletions" => diff[:deletions]
         })
 
       :error ->

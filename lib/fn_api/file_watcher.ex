@@ -5,7 +5,8 @@ defmodule FnApi.FileWatcher do
   Also generates a file containing the latest list on each change.
   """
   use GenServer
-  import FnApi.Utils
+  require Logger
+  import FnApi.Database.Updates
 
   def start_link(args) do
     GenServer.start_link(__MODULE__, args)
@@ -15,16 +16,17 @@ defmodule FnApi.FileWatcher do
     {:ok, watcher_pid} = FileSystem.start_link(args)
     FileSystem.subscribe(watcher_pid)
 
-    generate_diff()
+    Logger.debug("STARTUP: Generating blacklist file...")
+    update_blacklist_file()
 
     {:ok, %{watcher_pid: watcher_pid}}
   end
 
   def handle_info({:file_event, watcher_pid, {path, events}}, %{watcher_pid: watcher_pid} = state) do
     if(Enum.member?(events, :closed)) do
-      case fetch_changes(path) do
-        {:error, _} -> :error
-        {:ok, _} -> generate_diff()
+      case insert_changes(path) do
+        {:error, msg} -> Logger.error(msg)
+        {:ok, _} -> update_blacklist_file()
       end
     end
 
