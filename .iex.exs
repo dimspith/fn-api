@@ -1,5 +1,5 @@
 import Ecto.Query
-alias FnApi.{Repo, Insertions, Deletions, Checkpoints, Labels, Tokens, Tags}
+alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints, Labels, Tokens, Tags}
 
 defmodule IU do
   def get_uuid(fullName) do

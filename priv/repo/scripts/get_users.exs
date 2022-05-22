@@ -2,7 +2,7 @@ Logger.configure([level: :error])
 
 import Ecto.Query
 import Ecto.UUID
-alias FnApi.{Repo, Tokens}
+alias FnApi.Database.{Repo, Tokens}
 
 # Get all names and uuids from users
 users =

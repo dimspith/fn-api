@@ -1,5 +1,5 @@
 import Ecto.UUID
-alias FnApi.{Repo, Tokens}
+alias FnApi.Database.{Repo, Tokens}
 
 args = System.argv()
 if(Enum.empty?(args)) do
