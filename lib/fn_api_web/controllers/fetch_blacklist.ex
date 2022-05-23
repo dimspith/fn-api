@@ -21,10 +21,10 @@ defmodule FnApiWeb.FetchBlacklist do
           "lastupdate" => get_last_update(),
           "insertions" => diff[:insertions],
           "deletions" => diff[:deletions]
-        })
+        }) 
 
       :error ->
-        json(conn, %{"error" => "Invalid unix timestamp!"})
+        json(conn, %{"error" => "Invalid checkpoint!"})
     end
   end
 

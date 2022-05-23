@@ -24,7 +24,7 @@ defmodule FnApi.FileWatcher do
 
   def handle_info({:file_event, watcher_pid, {path, events}}, %{watcher_pid: watcher_pid} = state) do
     if(Enum.member?(events, :closed)) do
-      case insert_changes(path) do
+      case db_add_all(path) do
         {:error, msg} -> Logger.error(msg)
         {:ok, _} -> update_blacklist_file()
       end

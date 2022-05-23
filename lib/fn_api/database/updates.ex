@@ -3,7 +3,8 @@ defmodule FnApi.Database.Updates do
   require Logger
   alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints}
 
-  defp read_changes(path) do
+  defp read_file_changes(path) do
+    ## Read domain changes from `path`
     case File.read!(path) do
       "" ->
         {:error, "File is Empty!"}
@@ -25,9 +26,12 @@ defmodule FnApi.Database.Updates do
     end
   end
 
-  defp get_unix_time(), do: DateTime.now!("Etc/UTC") |> DateTime.to_unix()
+  defp get_curr_unix_time(), do: DateTime.now!("Etc/UTC") |> DateTime.to_unix()
+  ## Get current unix time
 
-  defp add_changes(changes, datetime) do
+  defp db_add_changes(changes, datetime) do
+    ## Add changes (insertions/deletions to database)
+
     # Add all changes to Insertions table
     Enum.map(changes[:add], fn x ->
       changes =
@@ -53,30 +57,39 @@ defmodule FnApi.Database.Updates do
     end)
   end
 
-  defp add_checkpoint(datetime), do: Repo.insert(%Checkpoints{date: datetime})
+  defp db_add_checkpoint(datetime), do: Repo.insert(%Checkpoints{date: datetime})
+  ## Add current unix time as a checkpoint
 
-  def insert_changes(path) do
-    case read_changes(path) do
+  def db_add_all(path) do
+    ## Add changes and checkpoint to database
+
+    case read_file_changes(path) do
       {:error, msg} ->
         {:error, msg}
 
       {:ok, changes} ->
-        datetime = get_unix_time()
-        add_changes(changes, datetime)
-        add_checkpoint(datetime)
+        datetime = get_curr_unix_time()
+        db_add_changes(changes, datetime)
+        db_add_checkpoint(datetime)
         {:ok, :success}
     end
   end
 
   defp diff_find_common(diff, list, type) do
+    ## Find common elements between a key from the diff and a list
+
     MapSet.intersection(
       MapSet.new(list),
-      MapSet.new(diff[type]))
+      MapSet.new(diff[type])
+    )
     |> MapSet.to_list()
     |> IO.inspect(label: "Common")
   end
 
   defp diff_update_insertions(diff, insertions, common) do
+    ## Append insertions to diff, removing common elements from both
+    ## appended insertions and stored deletions.
+
     diff
     |> Map.update!(:insertions, fn current ->
       current ++ (insertions -- common)
@@ -84,10 +97,11 @@ defmodule FnApi.Database.Updates do
     |> Map.update!(:deletions, fn current ->
       current -- common
     end)
-    |> IO.inspect(label: "DAI")
   end
 
   defp diff_update_deletions(diff, deletions, common) do
+    ## Append deletions to diff, removing common elements from both
+    ## appended deletions and stored insertions.
     diff
     |> Map.update!(:deletions, fn current ->
       current ++ (deletions -- common)
@@ -95,7 +109,6 @@ defmodule FnApi.Database.Updates do
     |> Map.update!(:insertions, fn current ->
       current -- common
     end)
-    |> IO.inspect(label: "DAD")
   end
 
   defp diff_insert_dedup(diff, [], _), do: diff
@@ -107,6 +120,7 @@ defmodule FnApi.Database.Updates do
       :insertions ->
         common = diff_find_common(diff, changes, :deletions)
         diff_update_insertions(diff, changes, common)
+
       :deletions ->
         common = diff_find_common(diff, changes, :insertions)
         diff_update_deletions(diff, changes, common)
@@ -114,6 +128,7 @@ defmodule FnApi.Database.Updates do
   end
 
   defp get_sorted_tables() do
+    ## Get the contents of the checkpoints, insertions, and deletions tables sorted by date.
     checkpoints = Repo.all(from(c in Checkpoints, select: c.date, order_by: c.date))
 
     insertions =
@@ -128,6 +143,8 @@ defmodule FnApi.Database.Updates do
   end
 
   defp get_sorted_tables(start_date) do
+    ## Get the contents of the checkpoints, insertions, and deletions tables sorted by date
+    ## starting from the supplied `start_date`
     checkpoints =
       Repo.all(
         from(c in Checkpoints, select: c.date, where: c.date > ^start_date, order_by: c.date)
@@ -160,10 +177,12 @@ defmodule FnApi.Database.Updates do
   defp remove_redundant(nil, _, _), do: []
 
   defp remove_redundant(changes, diff, type) do
+    ## Remove already existing domains from current changes
     (changes |> Enum.map(&elem(&1, 0))) -- diff[type]
   end
 
   defp construct_diff(tables) do
+    ## Construct the diff
     {checkpoints, insertions, deletions} = tables
 
     Enum.reduce(checkpoints, %{insertions: [], deletions: []}, fn checkpoint, diff ->
@@ -177,13 +196,14 @@ defmodule FnApi.Database.Updates do
   end
 
   defp sort_diff(diff) do
+    ## Sort diff values
     diff
     |> Map.update!(:insertions, &Enum.sort/1)
     |> Map.update!(:deletions, &Enum.sort/1)
   end
 
   def update_blacklist_file() do
-    ## Generates the whole blacklist and writes to file.
+    ## Generate the whole blacklist and write it to a file.
 
     diff =
       get_sorted_tables()
@@ -195,12 +215,12 @@ defmodule FnApi.Database.Updates do
       diff[:insertions]
       |> Enum.map(fn x -> x <> "\n" end)
     )
+
     Logger.debug("Updated blacklist file!")
   end
 
   def generate_diff(date) do
-    ## Generates the diffs from the blacklist at `date` to the current one.
-    ## Returns the total `insertions`, `deletions` and the `lastupdate` as a Map.
+    ## Generate the diff starting from `date`.
 
     get_sorted_tables(date)
     |> construct_diff()
@@ -208,7 +228,7 @@ defmodule FnApi.Database.Updates do
   end
 
   def get_last_update() do
-    ## Gets the last update time from the database.
+    ## Get the last update time from the database.
 
     lastupdate = Repo.all(from c in Checkpoints, select: max(c.date))
 
