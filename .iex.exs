@@ -3,7 +3,7 @@ alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints, Labels, Tokens, 
 
 defmodule IU do
   def get_uuid(fullName) do
-    Ecto.UUID.load! Repo.get_by(Tokens, fullName: fullName).uuid
+    Repo.get_by(Tokens, fullName: fullName).uuid
   end
   def insert_token(name) do
     Repo.insert(%Tokens{fullName: name})

@@ -8,9 +8,10 @@ defmodule FnApi.Database.Labelling do
   def convert!(num), do: String.to_integer(num)
 
   defp valid_token?(token) do
-    case Ecto.UUID.dump(token) do
-      {:ok, token_bin} -> Repo.one(from(t in Tokens, select: t.uuid == ^token_bin))
-      :error -> false
+    if Repo.one(from(t in Tokens, select: t.uuid == ^token)) do
+      token
+    else
+      false
     end
   end
 
@@ -32,7 +33,8 @@ defmodule FnApi.Database.Labelling do
   defp submit_label(params) do
     Repo.insert!(
       %Labels{
-        uuid: Ecto.UUID.dump!(params["token"]),
+        # uuid: Ecto.UUID.dump!(params["token"]),
+        uuid: params["token"],
         domain: params["domain"],
         isFake: convert!(params["is-fake"]),
         comments: params["comments"]
@@ -82,7 +84,8 @@ defmodule FnApi.Database.Labelling do
   def insert_label(params) do
     if(valid_token?(params["token"])) do
       domain = params["domain"]
-      uuid = Ecto.UUID.dump!(params["token"])
+      # uuid = Ecto.UUID.dump!(params["token"])
+      uuid = params["token"]
       tags = get_tags(params)
 
       # If the domain was already submitted by the user, resubmit the current label
