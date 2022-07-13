@@ -1,18 +1,31 @@
 defmodule FnApi.Database.Labelling do
   import Ecto.Query
   require Ecto.UUID
+  require Logger
   alias FnApi.Database.{Repo, Labels, Tokens, Tags}
   
   def convert!("true"), do: true
   def convert!("false"), do: false
   def convert!(num), do: String.to_integer(num)
 
-  defp valid_token?(token) do
+  defp valid_uuid?(uuid) do
+    case Ecto.UUID.dump(uuid) do
+      {:ok, binary} -> binary
+      :error -> false
+    end
+  end
+  
+  defp token_exists?(token) do
     if Repo.one(from(t in Tokens, select: t.uuid == ^token)) do
       token
     else
       false
-    end
+    end    
+  end
+
+  defp valid_token?(token) do
+    token_binary = valid_uuid?(token)
+    if (token_binary && token_exists?(token_binary)), do: token_binary, else: false
   end
 
   defp get_tags(params) do
@@ -30,11 +43,12 @@ defmodule FnApi.Database.Labelling do
     )
   end
 
-  defp submit_label(params) do
+  defp submit_label(uuid, params) do
+    Logger.debug("Submitting Label!")
     Repo.insert!(
       %Labels{
         # uuid: Ecto.UUID.dump!(params["token"]),
-        uuid: params["token"],
+        uuid: uuid,
         domain: params["domain"],
         isFake: convert!(params["is-fake"]),
         comments: params["comments"]
@@ -44,6 +58,7 @@ defmodule FnApi.Database.Labelling do
   end
 
   defp resubmit_label(uuid, previous_label, params) do
+    Logger.debug("Resubmitting Label!")
     updated_label =
       Ecto.Changeset.change(previous_label,
         isFake: convert!(params["is-fake"]),
@@ -82,15 +97,14 @@ defmodule FnApi.Database.Labelling do
   end
 
   def insert_label(params) do
-    if(valid_token?(params["token"])) do
+    if(uuid = valid_token?(params["token"])) do
       domain = params["domain"]
-      # uuid = Ecto.UUID.dump!(params["token"])
-      uuid = params["token"]
+      
       tags = get_tags(params)
 
       # If the domain was already submitted by the user, resubmit the current label
       case previous_label = is_label_resubmission?(uuid, domain) do
-        nil -> submit_label(params)
+        nil -> submit_label(uuid, params)
         _  -> resubmit_label(uuid, previous_label, params)
       end
 
