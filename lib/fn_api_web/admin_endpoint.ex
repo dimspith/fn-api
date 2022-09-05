@@ -1,4 +1,4 @@
-defmodule FnApiWeb.Endpoint do
+defmodule FnApiWeb.AdminEndpoint do
   use Phoenix.Endpoint, otp_app: :fn_api
 
   # The session will be stored in the cookie and signed,
@@ -42,5 +42,5 @@ defmodule FnApiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug FnApiWeb.Router
+  plug FnApiWeb.AdminRouter
 end
