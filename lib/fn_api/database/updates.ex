@@ -3,29 +3,6 @@ defmodule FnApi.Database.Updates do
   require Logger
   alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints}
 
-  defp read_file_changes(path) do
-    ## Read domain changes from `path`
-    case File.read!(path) do
-      "" ->
-        {:error, "File is Empty!"}
-
-      file ->
-        changes =
-          file
-          |> String.split("\n")
-          |> Enum.map(fn x -> String.split(x, " ") end)
-          |> Enum.reduce(%{add: [], rm: []}, fn x, acc ->
-            case Enum.at(x, 0) do
-              "+" -> Map.update!(acc, :add, &[Enum.at(x, 1) | &1])
-              "-" -> Map.update!(acc, :rm, &[Enum.at(x, 1) | &1])
-              _ -> acc
-            end
-          end)
-
-        {:ok, changes}
-    end
-  end
-
   defp get_curr_unix_time(), do: DateTime.now!("Etc/UTC") |> DateTime.to_unix()
   ## Get current unix time
 
@@ -33,7 +10,7 @@ defmodule FnApi.Database.Updates do
     ## Add changes (insertions/deletions to database)
 
     # Add all changes to Insertions table
-    Enum.map(changes[:add], fn x ->
+    Enum.map(changes["insert"], fn x ->
       changes =
         %Insertions{}
         |> Insertions.changeset(%{domain: x, date: datetime})
@@ -45,7 +22,7 @@ defmodule FnApi.Database.Updates do
     end)
 
     # Add all changes to Deletions table
-    Enum.each(changes[:rm], fn x ->
+    Enum.each(changes["delete"], fn x ->
       changes =
         %Deletions{}
         |> Deletions.changeset(%{domain: x, date: datetime})
@@ -60,19 +37,12 @@ defmodule FnApi.Database.Updates do
   defp db_add_checkpoint(datetime), do: Repo.insert(%Checkpoints{date: datetime})
   ## Add current unix time as a checkpoint
 
-  def db_add_all(path) do
+  def db_add_all(changes) do
     ## Add changes and checkpoint to database
-
-    case read_file_changes(path) do
-      {:error, msg} ->
-        {:error, msg}
-
-      {:ok, changes} ->
-        datetime = get_curr_unix_time()
-        db_add_changes(changes, datetime)
-        db_add_checkpoint(datetime)
-        {:ok, :success}
-    end
+    datetime = get_curr_unix_time()
+    db_add_changes(changes, datetime)
+    db_add_checkpoint(datetime)
+    {:ok, :success}
   end
 
   defp diff_find_common(diff, list, type) do
@@ -91,10 +61,10 @@ defmodule FnApi.Database.Updates do
     ## appended insertions and stored deletions.
 
     diff
-    |> Map.update!(:insertions, fn current ->
+    |> Map.update!(:insert, fn current ->
       current ++ (insertions -- common)
     end)
-    |> Map.update!(:deletions, fn current ->
+    |> Map.update!(:delete, fn current ->
       current -- common
     end)
   end
@@ -103,10 +73,10 @@ defmodule FnApi.Database.Updates do
     ## Append deletions to diff, removing common elements from both
     ## appended deletions and stored insertions.
     diff
-    |> Map.update!(:deletions, fn current ->
+    |> Map.update!(:delete, fn current ->
       current ++ (deletions -- common)
     end)
-    |> Map.update!(:insertions, fn current ->
+    |> Map.update!(:insert, fn current ->
       current -- common
     end)
   end
@@ -117,12 +87,12 @@ defmodule FnApi.Database.Updates do
     ## Add domain insertions and deletions to the diff, removing mutually exclusive changes.
 
     case type do
-      :insertions ->
-        common = diff_find_common(diff, changes, :deletions)
+      :insert ->
+        common = diff_find_common(diff, changes, :delete)
         diff_update_insertions(diff, changes, common)
 
-      :deletions ->
-        common = diff_find_common(diff, changes, :insertions)
+      :delete ->
+        common = diff_find_common(diff, changes, :insert)
         diff_update_deletions(diff, changes, common)
     end
   end
@@ -185,21 +155,21 @@ defmodule FnApi.Database.Updates do
     ## Construct the diff
     {checkpoints, insertions, deletions} = tables
 
-    Enum.reduce(checkpoints, %{insertions: [], deletions: []}, fn checkpoint, diff ->
-      to_insert = insertions[checkpoint] |> remove_redundant(diff, :insertions)
-      to_delete = deletions[checkpoint] |> remove_redundant(diff, :deletions)
+    Enum.reduce(checkpoints, %{insert: [], delete: []}, fn checkpoint, diff ->
+      to_insert = insertions[checkpoint] |> remove_redundant(diff, :insert)
+      to_delete = deletions[checkpoint] |> remove_redundant(diff, :delete)
 
       diff
-      |> diff_insert_dedup(to_insert, :insertions)
-      |> diff_insert_dedup(to_delete, :deletions)
+      |> diff_insert_dedup(to_insert, :insert)
+      |> diff_insert_dedup(to_delete, :delete)
     end)
   end
 
   defp sort_diff(diff) do
     ## Sort diff values
     diff
-    |> Map.update!(:insertions, &Enum.sort/1)
-    |> Map.update!(:deletions, &Enum.sort/1)
+    |> Map.update!(:insert, &Enum.sort/1)
+    |> Map.update!(:delete, &Enum.sort/1)
   end
 
   def update_blacklist_file() do
@@ -212,7 +182,7 @@ defmodule FnApi.Database.Updates do
 
     File.write!(
       "priv/lists/blacklist",
-      diff[:insertions]
+      diff[:insert]
       |> Enum.map(fn x -> x <> "\n" end)
     )
 

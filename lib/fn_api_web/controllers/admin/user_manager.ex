@@ -8,13 +8,12 @@ defmodule FnApiWeb.Admin.UserManager do
 
     Enum.map(db_res, fn x ->
       Map.take(x, [:uuid, :fullName])
-      |> Map.update!(:uuid, &(Ecto.UUID.load!(&1)))
     end)
   end
 
   defp get_user(name) ,do: Repo.one(from t in Tokens, where: t.fullName == ^name)
 
-  defp user_to_map(user), do: Map.take(user, [:fullName, :uuid]) |> Map.update!(:uuid, &(Ecto.UUID.load!(&1)))
+  defp user_to_map(user), do: Map.take(user, [:fullName, :uuid])
 
   def create(conn, params) do
     ## Create a new user
@@ -30,7 +29,6 @@ defmodule FnApiWeb.Admin.UserManager do
         nil ->
           Repo.insert(%Tokens{fullName: name})
           json(conn, get_user(name) |> user_to_map())
-          
         _ ->
           conn
           |> json(%{"error" => "A user with that name already exists!"})

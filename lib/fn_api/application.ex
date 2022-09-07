@@ -10,8 +10,6 @@ defmodule FnApi.Application do
     children = [
       # Start the Ecto repository
       FnApi.Database.Repo,
-      # Start the filesystem watcher
-      {FnApi.FileWatcher, dirs: ["priv/lists/changes"]},
       # Start the Telemetry supervisor
       FnApiWeb.Telemetry,
       # Start the PubSub system

@@ -5,9 +5,9 @@ defmodule FnApiWeb.AdminRouter do
     plug :accepts, ["json"]
   end
 
-  scope "/", FnApiWeb do
+  scope "/list", FnApiWeb do
     pipe_through :api
-    post "/update", Admin.UpdateBlacklist, :index
+    post "/update", Admin.UpdateBlacklist, :update
   end
 
   scope "/users", FnApiWeb do
