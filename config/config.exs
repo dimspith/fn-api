@@ -13,15 +13,18 @@ config :fn_api,
 # Configures the endpoint
 config :fn_api, FnApiWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: FnApiWeb.ErrorView, accepts: ~w(json), layout: false],
-  pubsub_server: FnApi.PubSub,
-  live_view: [signing_salt: "yUKV1Ooe"]
+  render_errors: [view: FnApiWeb.ErrorView, accepts: ~w(json), layout: false]
+
+# Configures the endpoint
+config :fn_api, FnApiWeb.AdminEndpoint,
+  url: [host: "localhost"],
+  render_errors: [view: FnApiWeb.ErrorView, accepts: ~w(json), layout: false]
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id],
-  level: :error
+  level: :warning
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
