@@ -1,32 +1,9 @@
 defmodule FnApi.Database.Labelling do
   import Ecto.Query
+  import FnApi.Database.Utils
   require Ecto.UUID
   require Logger
-  alias FnApi.Database.{Repo, Labels, Tokens, Tags}
-  
-  def convert!("true"), do: true
-  def convert!("false"), do: false
-  def convert!(num), do: String.to_integer(num)
-
-  defp valid_uuid?(uuid) do
-    case Ecto.UUID.dump(uuid) do
-      {:ok, binary} -> binary
-      :error -> false
-    end
-  end
-  
-  defp token_exists?(token) do
-    if Repo.one(from(t in Tokens, select: t.uuid == ^token)) do
-      token
-    else
-      false
-    end    
-  end
-
-  defp valid_token?(token) do
-    token_binary = valid_uuid?(token)
-    if (token_binary && token_exists?(token_binary)), do: token_binary, else: false
-  end
+  alias FnApi.Database.{Repo, Labels, Tags}
 
   defp get_tags(params) do
     Enum.filter(Map.keys(params), fn key ->
