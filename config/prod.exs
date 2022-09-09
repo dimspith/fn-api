@@ -19,15 +19,12 @@ config :fn_api, FnApi.Database.Repo,
   pool_size: 20,
   queue_target: 5000
 
-maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
-
 config :fn_api, FnApiWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: false,
-  socket_options: maybe_ipv6,
   debug_errors: false,
   watchers: []
   # secret_key_base: "dtfRv3Jr9Ndvqybq15EG7MCMbnK/AMc2hMvirEGkUOvl8wA4Yc0ZVgvQd9SFOWle",
@@ -38,7 +35,6 @@ config :fn_api, FnApiWeb.AdminEndpoint,
   http: [ip: {0, 0, 0, 0}, port: 3000],
   check_origin: false,
   code_reloader: false,
-  socket_options: maybe_ipv6,
   debug_errors: false,
   watchers: []
   # secret_key_base: "dtfRv3Jr9Ndvqybq15EG7MCMbnK/AMc2hMvirEGkUOvl8wA4Yc0ZVgvQd9SFOWle",

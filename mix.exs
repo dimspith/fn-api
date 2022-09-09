@@ -42,7 +42,6 @@ defmodule FnApi.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:file_system, "~> 0.2.10"}
     ]
   end
 
