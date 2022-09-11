@@ -10,15 +10,10 @@ defmodule FnApiWeb.AdminEndpoint do
     signing_salt: "zUjRTtye"
   ]
 
-  # Serve at "/" the static files from "priv/static" directory.
-  #
-  # You should set gzip to true if you are running phx.digest
-  # when deploying your static files in production.
-  # plug Plug.Static,
-  #   at: "/",
-  #   from: :fn_api,
-  #   gzip: false,
-  #   only: ~w(assets fonts images favicon.ico robots.txt)
+  # Phoenix Liveview socket
+  socket "/live", Phoenix.LiveView.Socket,
+    websocket: [connect_info: [session: @session_options]],
+    metrics: FnApiWeb.Telemetry
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

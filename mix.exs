@@ -20,7 +20,7 @@ defmodule FnApi.MixProject do
   def application do
     [
       mod: {FnApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -37,11 +37,13 @@ defmodule FnApi.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:ecto_sqlite3, ">= 0.0.0"},
+      {:phoenix_live_view, "~> 0.17.11"},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -55,10 +57,10 @@ defmodule FnApi.MixProject do
     [
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "sql.get_users": ["run --no-compile priv/repo/scripts/get_users.exs"], 
-      "sql.insert_user": ["run --no-compile priv/repo/scripts/insert_user.exs"], 
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+
+      "fnapi.release": ["cmd ./scripts/make_release.sh"],
     ]
   end
 end

@@ -7,6 +7,7 @@ config :fn_api, FnApi.Database.Repo,
   show_sensitive_data_on_connection_error: true
 
 maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
+live_view_salt = System.get_env("LIVE_VIEW_SALT") || "d8dnNoWXbMNDZCT1gnk5VRC2EZOvugrH"
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -34,6 +35,7 @@ config :fn_api, FnApiWeb.AdminEndpoint,
   socket_options: maybe_ipv6,
   debug_errors: false,
   secret_key_base: "dtfRv3Jr9Ndvqybq15EG7MCMbnK/AMc2hMvirEGkUOvl8wA4Yc0ZVgvQd9SFOWle",
+  live_view: [signing_salt: live_view_salt],
   watchers: []
 
 # Do not include metadata nor timestamps in development logs
