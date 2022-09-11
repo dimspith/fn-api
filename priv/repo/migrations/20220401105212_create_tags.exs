@@ -1,4 +1,4 @@
-defmodule FnApi.Repo.Migrations.CreateTags do
+defmodule FnApi.Database.Repo.Migrations.CreateTags do
   use Ecto.Migration
 
   def change do

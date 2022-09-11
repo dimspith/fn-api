@@ -7,7 +7,7 @@ cd "$PROJECT_DIR"
 export MIX_ENV=prod
 mix deps.get --only prod
 mix compile
-mix phx.gen.release
+#mix phx.gen.release --ecto
 mix release 
 
 echo "Compressing release into archive..."
@@ -19,3 +19,5 @@ zip -9r "$RELEASE_FILE" start_release.sh
 # Add release
 cd "$RELEASE_DIR"
 zip -ur "$RELEASE_FILE" ./fn_api
+
+echo "Release archive release.zip has been generated!"

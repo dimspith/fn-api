@@ -61,6 +61,7 @@ defmodule FnApi.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
 
       "fnapi.release": ["cmd ./scripts/make_release.sh"],
+      "fnapi.clean": ["cmd ./scripts/clean.sh"],
     ]
   end
 end
