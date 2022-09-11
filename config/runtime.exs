@@ -16,6 +16,7 @@ import Config
 if config_env() == :prod do
   database_path = System.get_env("DATABASE_PATH") || "db/fnapi.db"
   secret_key_base = System.get_env("SECRET_KEY_BASE") || "ehsLE9d+kXqrvvEDqT3jmiWGrZE2A27pQltXilsl2TrWiYhn+oQ1RSYTfaor4yBEv"
+  live_view_salt = System.get_env("LIVE_VIEW_SALT") || "d8dnNoWXbMNDZCT1gnk5VRC2EZOvugrH"
   host = System.get_env("PHX_HOST") || "localhost"
 
   # Database config
@@ -37,5 +38,6 @@ if config_env() == :prod do
     url: [host: host, port: 3000],
     http: [ip: {127, 0, 0, 1}, port: 3000],
     secret_key_base: secret_key_base,
+    live_view: [signing_salt: live_view_salt],
     server: true
 end
