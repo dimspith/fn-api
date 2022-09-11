@@ -1,4 +1,4 @@
-defmodule FnApi.Repo.Migrations.CreateDeletions do
+defmodule FnApi.Database.Repo.Migrations.CreateDeletions do
   use Ecto.Migration
 
   def change do

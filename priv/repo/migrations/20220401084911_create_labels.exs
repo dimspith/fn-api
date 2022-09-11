@@ -1,4 +1,4 @@
-defmodule FnApi.Repo.Migrations.CreateLabels do
+defmodule FnApi.Database.Repo.Migrations.CreateLabels do
   use Ecto.Migration
 
   def change do

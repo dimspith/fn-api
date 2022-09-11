@@ -1,4 +1,4 @@
-defmodule FnApi.Repo.Migrations.CreateTokens do
+defmodule FnApi.Database.Repo.Migrations.CreateTokens do
   use Ecto.Migration
 
   def change do

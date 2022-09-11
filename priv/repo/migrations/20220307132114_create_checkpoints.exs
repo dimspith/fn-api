@@ -1,4 +1,4 @@
-defmodule FnApi.Repo.Migrations.CreateCheckpoints do
+defmodule FnApi.Database.Repo.Migrations.CreateCheckpoints do
   use Ecto.Migration
 
   def change do
