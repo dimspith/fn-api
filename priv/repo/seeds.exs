@@ -9,7 +9,7 @@ alias FnApi.Database.{Repo, Insertions, Checkpoints}
 
 curr_datetime = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 
-File.stream!("priv/lists/default")|> Enum.each(fn domain ->
+File.stream!(Application.app_dir(:fn_api, "priv") <> "/lists/default")|> Enum.each(fn domain ->
   domain
   |> String.trim()
   |> (fn domain ->
