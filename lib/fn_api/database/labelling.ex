@@ -1,4 +1,8 @@
 defmodule FnApi.Database.Labelling do
+  @moduledoc """
+  A set of functions that handle label submission
+  """
+
   import Ecto.Query
   import FnApi.Database.Utils
   require Ecto.UUID
@@ -51,7 +55,7 @@ defmodule FnApi.Database.Labelling do
 
   defp insert_tags(uuid, tags, params) do
     # Insert Tags
-    if(!Enum.empty?(tags)) do
+    if !Enum.empty?(tags) do
       Enum.each(tags, fn tag ->
         Repo.insert!(
           %Tags{
@@ -64,7 +68,7 @@ defmodule FnApi.Database.Labelling do
       end)
     end
 
-    if(params["bias"]) do
+    if params["bias"] do
       Repo.insert!(%Tags{
         uuid: uuid,
         domain: params["domain"],
@@ -74,7 +78,7 @@ defmodule FnApi.Database.Labelling do
   end
 
   def insert_label(params) do
-    if(uuid = valid_token?(params["token"])) do
+    if uuid = valid_token?(params["token"]) do
       domain = params["domain"]
       
       tags = get_tags(params)

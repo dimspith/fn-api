@@ -1,4 +1,8 @@
 defmodule FnApi.Database.Utils do
+  @moduledoc """
+  Utility functions
+  """
+
   import Ecto.Query
   require Ecto.UUID
   require Logger
@@ -25,6 +29,6 @@ defmodule FnApi.Database.Utils do
 
   def valid_token?(token) do
     token_binary = valid_uuid?(token)
-    if (token_binary && token_exists?(token_binary)), do: token_binary, else: false
+    if token_binary && token_exists?(token_binary), do: token_binary, else: false
   end
 end

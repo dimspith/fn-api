@@ -1,4 +1,8 @@
 defmodule FnApiWeb.Admin.UserManager do
+  @moduledoc """
+  A set of functions to handle users in the database
+  """
+
   import Ecto.Query
   alias FnApi.Database.{Repo, Tokens}
   use FnApiWeb, :controller
@@ -11,7 +15,7 @@ defmodule FnApiWeb.Admin.UserManager do
     end)
   end
 
-  defp get_user(name) ,do: Repo.one(from t in Tokens, where: t.fullName == ^name)
+  defp get_user(name), do: Repo.one(from t in Tokens, where: t.fullName == ^name)
 
   defp user_to_map(user), do: Map.take(user, [:fullName, :uuid])
 
@@ -20,7 +24,7 @@ defmodule FnApiWeb.Admin.UserManager do
 
     name = params["name"]
 
-    if(is_nil(name)) do
+    if is_nil(name) do
       conn
       |> put_status(400)
       |> json(%{"error" => "No name supplied!"})
@@ -41,7 +45,7 @@ defmodule FnApiWeb.Admin.UserManager do
 
     name = params["name"]
 
-    if(is_nil(name)) do
+    if is_nil(name) do
       conn
       |> put_status(400)
       |> json(%{"error" => "No name supplied!"})
@@ -59,7 +63,7 @@ defmodule FnApiWeb.Admin.UserManager do
 
   def get(conn, params) do
     name = params["name"]
-    if(is_nil(name)) do
+    if is_nil(name) do
       conn
       |> put_status(400)
       |> json(%{"error" => "No name supplied!"})
