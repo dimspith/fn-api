@@ -38,6 +38,7 @@ if config_env() == :prod do
     url: [host: host, port: 3000],
     http: [ip: {127, 0, 0, 1}, port: 3000],
     secret_key_base: secret_key_base,
+    pubsub_server: FnApi.PubSub,
     live_view: [signing_salt: live_view_salt],
     server: true
 end
