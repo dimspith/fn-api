@@ -10,6 +10,8 @@ defmodule FnApi.Application do
     children = [
       # Start the Ecto repository
       FnApi.Database.Repo,
+      # Write the current blacklist to a file
+      {Task, fn -> FnApi.Database.Updates.update_blacklist_file() end},
       # Start the Telemetry supervisor
       FnApiWeb.Telemetry,
       # Start the PubSub system

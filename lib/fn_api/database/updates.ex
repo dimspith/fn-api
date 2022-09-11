@@ -3,14 +3,17 @@ defmodule FnApi.Database.Updates do
   require Logger
   alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints}
 
+  @blacklist_file Application.app_dir(:fn_api, "priv") <> "/lists/blacklist"
+
+  def blacklist_file, do: @blacklist_file
+
   defp get_curr_unix_time(), do: DateTime.now!("Etc/UTC") |> DateTime.to_unix()
-  ## Get current unix time
 
   defp db_add_changes(changes, datetime) do
     ## Add changes (insertions/deletions to database)
 
     # Add all changes to Insertions table
-    Enum.map(changes["insert"], fn x ->
+    Enum.each(changes["insert"], fn x ->
       changes =
         %Insertions{}
         |> Insertions.changeset(%{domain: x, date: datetime})
@@ -53,7 +56,6 @@ defmodule FnApi.Database.Updates do
       MapSet.new(diff[type])
     )
     |> MapSet.to_list()
-    |> IO.inspect(label: "Common")
   end
 
   defp diff_update_insertions(diff, insertions, common) do
@@ -181,7 +183,7 @@ defmodule FnApi.Database.Updates do
       |> sort_diff()
 
     File.write!(
-      "priv/lists/blacklist",
+      @blacklist_file,
       diff[:insert]
       |> Enum.map(fn x -> x <> "\n" end)
     )

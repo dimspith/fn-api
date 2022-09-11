@@ -2,10 +2,17 @@ defmodule FnApiWeb.FetchBlacklist do
   use FnApiWeb, :controller
   import FnApi.Database.Updates
 
+  def index(conn, params) do
+    case params do
+      %{"lastupdate" => unix_time} -> send_diffs(conn, unix_time)
+      _ -> send_all(conn)
+    end
+  end
+
   def send_all(conn) do
     json(conn, %{
       "sites" =>
-        File.read!("priv/lists/blacklist")
+        File.read!(blacklist_file())
         |> String.split("\n")
         |> (fn list -> List.delete_at(list, length(list) - 1) end).(),
       "lastupdate" => get_last_update()
@@ -25,13 +32,6 @@ defmodule FnApiWeb.FetchBlacklist do
 
       :error ->
         json(conn, %{"error" => "Invalid checkpoint!"})
-    end
-  end
-
-  def index(conn, params) do
-    case params do
-      %{"lastupdate" => unix_time} -> send_diffs(conn, unix_time)
-      _ -> send_all(conn)
     end
   end
 end
