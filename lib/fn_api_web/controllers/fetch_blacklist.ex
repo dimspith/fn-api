@@ -23,11 +23,10 @@ defmodule FnApiWeb.FetchBlacklist do
     case Integer.parse(unix_time) do
       {date, _} ->
         diff = generate_diff(date)
-
         json(conn, %{
           "lastupdate" => get_last_update(),
-          "insertions" => diff[:insertions],
-          "deletions" => diff[:deletions]
+          "insertions" => diff[:insert],
+          "deletions" => diff[:delete]
         }) 
 
       :error ->
