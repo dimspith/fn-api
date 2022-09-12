@@ -5,12 +5,18 @@ defmodule FnApi.MixProject do
     [
       app: :fn_api,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        fn_api: [
+          include_executables_for: [:unix],
+        ]
+      ],
+      default_release: :fn_api
     ]
   end
 
@@ -61,6 +67,7 @@ defmodule FnApi.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
 
       "fnapi.release": ["cmd ./scripts/make_release.sh"],
+      "fnapi.docker.build": ["cmd docker build --progress=plain ."],
       "fnapi.clean": ["cmd ./scripts/clean.sh"],
     ]
   end

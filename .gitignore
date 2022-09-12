@@ -29,3 +29,5 @@ fn_api-*.tar
 /mix.lock
 /db/*
 /priv/lists/blacklist
+/release.zip
+/release/

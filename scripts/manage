@@ -7,21 +7,22 @@ DIR="$( dirname -- "$0"; )"
 export USER_PORT=${USER_PORT-4000}
 export ADMIN_PORT=${ADMIN_PORT-3000}
 export ADMIN_PORT=${ADMIN_PORT-3000}
+export DATABASE_PATH=${DATABASE_PATH-"db/fnapi.db"}
 export PHX_HOST=${PHX_HOST-"localhost"}
 export POOL_SIZE=${POOL_SIZE-5}
 
 if [ "$1" == "migrate" ]; then
   echo "Running Release migrations..."
-  mkdir -p "$DIR"/db
-  "$DIR"/fn_api/bin/fn_api eval "FnApi.Release.migrate"
+  "$DIR"/fn_api/bin/migrate
   echo "Running database seeds..."
-  "$DIR"/fn_api/bin/fn_api eval "FnApi.Release.seeds"
+  "$DIR"/fn_api/bin/seeds
   exit
 else
   echo "============ ENV INFO ============="
   echo "-> USER_PORT: $USER_PORT"
   echo "-> ADMIN_PORT: $ADMIN_PORT"
   echo "-> PHX_HOST: $PHX_HOST"
+  echo "-> DATABASE_PATH: $DATABASE_PATH"
   echo "-> POOL_SIZE: $POOL_SIZE"
   echo "==================================="
 

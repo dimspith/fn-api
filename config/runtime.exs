@@ -14,7 +14,10 @@ import Config
 # end
 
 if config_env() == :prod do
-  database_path = System.get_env("DATABASE_PATH") || "db/fnapi.db"
+  
+  # Database path relative to project root
+  database_path = "#{:code.root_dir}/#{System.get_env("DATABASE_PATH") || "db/fnapi.db"}"
+  
   secret_key_base = System.get_env("SECRET_KEY_BASE") || "ehsLE9d+kXqrvvEDqT3jmiWGrZE2A27pQltXilsl2TrWiYhn+oQ1RSYTfaor4yBEv"
   live_view_salt = System.get_env("LIVE_VIEW_SALT") || "d8dnNoWXbMNDZCT1gnk5VRC2EZOvugrH"
   host = System.get_env("PHX_HOST") || "localhost"

@@ -14,7 +14,7 @@ echo "Compressing release into archive..."
 
 # Add startup script
 cd "$SCRIPTS_DIR"
-zip -9r "$RELEASE_FILE" start_release.sh
+zip -9r "$RELEASE_FILE" manage
 
 # Add release
 cd "$RELEASE_DIR"
