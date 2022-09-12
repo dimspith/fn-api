@@ -28,6 +28,4 @@ fn_api-*.tar
 /priv/static/
 /mix.lock
 /db/*
-/priv/lists/*.json
-/priv/lists/blacklist.json
-/priv/repo/*.db
+/priv/lists/blacklist
