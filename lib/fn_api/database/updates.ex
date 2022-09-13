@@ -3,9 +3,13 @@ defmodule FnApi.Database.Updates do
   require Logger
   alias FnApi.Database.{Repo, Insertions, Deletions, Checkpoints}
 
-  @blacklist_file Application.app_dir(:fn_api, "priv") <> "/lists/blacklist"
-
-  def blacklist_file, do: @blacklist_file
+  def blacklist_file do
+    case System.get_env("FNAPI_BLACKLIST") do
+      nil -> Application.app_dir(:fn_api, "priv") <> "/blacklist"
+      blacklist -> blacklist
+    end    
+  end
+  
 
   defp get_curr_unix_time(), do: DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 
@@ -183,7 +187,7 @@ defmodule FnApi.Database.Updates do
       |> sort_diff()
 
     File.write!(
-      @blacklist_file,
+      blacklist_file(),
       diff[:insert]
       |> Enum.map(fn x -> x <> "\n" end)
     )

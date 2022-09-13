@@ -3,11 +3,14 @@
 # The script's current directory relative to where it's called from
 DIR="$( dirname -- "$0"; )"
 
+# Create db directory
+mkdir -p $DIR/db
+
 # Default environment variables
 export USER_PORT=${USER_PORT-4000}
 export ADMIN_PORT=${ADMIN_PORT-3000}
 export ADMIN_PORT=${ADMIN_PORT-3000}
-export DATABASE_PATH=${DATABASE_PATH-"db/fnapi.db"}
+export DATABASE_PATH=${DATABASE_PATH-$(realpath "$DIR/db/fnapi.db")}
 export PHX_HOST=${PHX_HOST-"localhost"}
 export POOL_SIZE=${POOL_SIZE-5}
 

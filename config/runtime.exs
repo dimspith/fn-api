@@ -16,8 +16,7 @@ import Config
 if config_env() == :prod do
   
   # Database path relative to project root
-  database_path = "#{:code.root_dir}/#{System.get_env("DATABASE_PATH") || "db/fnapi.db"}"
-  
+  database_path = System.get_env("DATABASE_PATH") || "db/fnapi.db"
   secret_key_base = System.get_env("SECRET_KEY_BASE") || "ehsLE9d+kXqrvvEDqT3jmiWGrZE2A27pQltXilsl2TrWiYhn+oQ1RSYTfaor4yBEv"
   live_view_salt = System.get_env("LIVE_VIEW_SALT") || "d8dnNoWXbMNDZCT1gnk5VRC2EZOvugrH"
   host = System.get_env("PHX_HOST") || "localhost"
@@ -30,7 +29,7 @@ if config_env() == :prod do
   # User API
   config :fn_api, FnApiWeb.Endpoint,
     url: [host: host, port: 4000],
-    http: [ip: {127, 0, 0, 1}, port: 4000],
+    http: [ip: {0, 0, 0, 0}, port: 4000],
     secret_key_base: secret_key_base,
     server: true
 
@@ -39,7 +38,7 @@ if config_env() == :prod do
     # Binding to loopback ipv4 address prevents access from other machines.
     # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
     url: [host: host, port: 3000],
-    http: [ip: {127, 0, 0, 1}, port: 3000],
+    http: [ip: {0, 0, 0, 0}, port: 3000],
     secret_key_base: secret_key_base,
     pubsub_server: FnApi.PubSub,
     live_view: [signing_salt: live_view_salt],

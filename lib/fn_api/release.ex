@@ -5,8 +5,9 @@ defmodule FnApi.Release do
   """
   @app :fn_api
   @start_apps [:logger, :ecto, :ecto_sqlite3]
-  @seed_path Application.app_dir(:fn_api, "priv" <> "/repo/seeds.exs")
 
+  def seed_path, do: System.get_env("FNAPI_SEEDS") || Application.app_dir(:fn_api, "priv" <> "/repo/seeds/")
+  
   def migrate do
     ## Run migrations
     init(@app, @start_apps)
@@ -18,16 +19,25 @@ defmodule FnApi.Release do
 
   def seeds do
     ## Run seeds
+    
     init(@app, @start_apps)
     
-    run_seed_script(@seed_path)
+    run_seed_scripts(seed_path())
 
     stop()
   end
 
-  defp run_seed_script(seed_script) do
+  def run_seed_scripts(seed_script) do
+    ## Run all seed scripts in the specified directory
+    
     IO.puts "Running seed script #{seed_script}.."
-    Code.eval_file(seed_script)
+    "#{seed_path()}/*.exs"
+    |> Path.wildcard()
+    |> Enum.sort()
+    |> Enum.each(fn x ->
+      IO.puts "Running seed script #{x}.."
+      Code.eval_file(x)
+    end)
   end
 
   def rollback(repo, version) do

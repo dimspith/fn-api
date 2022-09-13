@@ -62,12 +62,13 @@ defmodule FnApi.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run -e \"FnApi.Release.run_seed_scripts('priv/repo/seeds/')\""],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
 
       "fnapi.release": ["cmd ./scripts/make_release.sh"],
-      "fnapi.docker.build": ["cmd docker build --progress=plain ."],
+      "fnapi.docker.build": ["cmd docker build -t fn_api --progress=plain ."],
+      "fnapi.docker.run": ["cmd docker run --rm -p 3000:3000 -p 4000:4000 fn_api"],
       "fnapi.clean": ["cmd ./scripts/clean.sh"],
     ]
   end
