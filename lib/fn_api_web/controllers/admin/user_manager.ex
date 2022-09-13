@@ -17,7 +17,10 @@ defmodule FnApiWeb.Admin.UserManager do
 
   defp get_user(name), do: Repo.one(from t in Tokens, where: t.fullName == ^name)
 
-  defp user_to_map(user), do: Map.take(user, [:fullName, :uuid])
+  defp user_to_map(user) do
+    Map.take(user, [:fullName, :uuid])
+    |> Map.update!(:uuid, &(Ecto.UUID.load!(&1)))
+  end
 
   def create(conn, params) do
     ## Create a new user

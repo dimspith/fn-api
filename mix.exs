@@ -66,7 +66,7 @@ defmodule FnApi.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
 
-      "fnapi.release": ["cmd ./scripts/make_release.sh"],
+      "fnapi.release": ["cmd rm release.zip", "cmd ./scripts/make_release.sh"],
       "fnapi.docker.build": ["cmd docker build -t fn_api --progress=plain ."],
       "fnapi.docker.run": ["cmd docker run --rm -p 3000:3000 -p 4000:4000 fn_api"],
       "fnapi.clean": ["cmd ./scripts/clean.sh"],
