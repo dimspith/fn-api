@@ -1,4 +1,4 @@
-defmodule FnApiWeb.Admin.UserManager do
+defmodule FnApiWeb.Admin.UserController do
   @moduledoc """
   A set of functions to handle users in the database
   """
@@ -7,20 +7,15 @@ defmodule FnApiWeb.Admin.UserManager do
   alias FnApi.Database.{Repo, Tokens}
   use FnApiWeb, :controller
 
-  defp ecto_tokens_map(db_res) do
-    ## Generate a map from a database response containing Tokens
-
-    Enum.map(db_res, fn x ->
-      Map.take(x, [:uuid, :fullName])
-    end)
-  end
-
   defp get_user(name), do: Repo.one(from t in Tokens, where: t.fullName == ^name)
 
   defp user_to_map(user) do
     Map.take(user, [:fullName, :uuid])
     |> Map.update!(:uuid, &(Ecto.UUID.load!(&1)))
   end
+
+  defp users_to_map(db_res) ,do: Enum.map(db_res, fn user -> user_to_map(user) end)
+    ## Generate a map from a database response containing Tokens
 
   def create(conn, params) do
     ## Create a new user
@@ -83,7 +78,7 @@ defmodule FnApiWeb.Admin.UserManager do
   def get_all(conn, _params) do
     users =
       Repo.all(from Tokens)
-      |> ecto_tokens_map()
+      |> users_to_map()
     
     json(conn, users)
   end

@@ -15,15 +15,15 @@ defmodule FnApiWeb.AdminRouter do
 
   scope "/list", FnApiWeb do
     pipe_through :api
-    post "/update", Admin.UpdateBlacklist, :update
+    post "/update", Admin.UpdateController, :update
   end
 
   scope "/users", FnApiWeb do
     pipe_through :api
-    post "/create", Admin.UserManager, :create
-    post "/delete", Admin.UserManager, :delete
-    get "/get", Admin.UserManager, :get
-    get "/getAll", Admin.UserManager, :get_all
+    post "/create", Admin.UserController, :create
+    post "/delete", Admin.UserController, :delete
+    get "/get", Admin.UserController, :get
+    get "/getAll", Admin.UserController, :get_all
   end
 
   import Phoenix.LiveDashboard.Router
