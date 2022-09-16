@@ -20,11 +20,10 @@ defmodule FnApi.Database.Utils do
   end
   
   def token_exists?(token) do
-    if Repo.one(from(t in Tokens, select: t.uuid == ^token)) do
-      token
-    else
-      false
-    end    
+    case Repo.exists?(from(t in Tokens, select: t.uuid == ^token)) do
+      true -> token
+      false -> false
+    end
   end
 
   def valid_token?(token) do

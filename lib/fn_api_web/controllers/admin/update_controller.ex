@@ -5,7 +5,7 @@ defmodule FnApiWeb.Admin.UpdateBlacklist do
 
   def map_keys_exist?(map, keys) do
     ## Check if any of the keys exist in the map
-    keys |> Enum.any?(&(Map.has_key?(map, &1)))
+    keys |> Enum.any?(&Map.has_key?(map, &1))
   end
 
   def map_fix_params(map) do
@@ -21,6 +21,7 @@ defmodule FnApiWeb.Admin.UpdateBlacklist do
         conn
         |> put_status(400)
         |> json(%{"error" => "No insertions or deletions supplied!"})
+
       true ->
         case db_add_all(params |> map_fix_params()) do
           {:ok, _} ->
@@ -30,4 +31,3 @@ defmodule FnApiWeb.Admin.UpdateBlacklist do
     end
   end
 end
-

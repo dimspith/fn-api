@@ -11,11 +11,11 @@ defmodule FnApiWeb.Admin.UserController do
 
   defp user_to_map(user) do
     Map.take(user, [:fullName, :uuid])
-    |> Map.update!(:uuid, &(Ecto.UUID.load!(&1)))
+    |> Map.update!(:uuid, &Ecto.UUID.load!(&1))
   end
 
-  defp users_to_map(db_res) ,do: Enum.map(db_res, fn user -> user_to_map(user) end)
-    ## Generate a map from a database response containing Tokens
+  defp users_to_map(db_res), do: Enum.map(db_res, fn user -> user_to_map(user) end)
+  ## Generate a map from a database response containing Tokens
 
   def create(conn, params) do
     ## Create a new user
@@ -31,6 +31,7 @@ defmodule FnApiWeb.Admin.UserController do
         nil ->
           Repo.insert(%Tokens{fullName: name})
           json(conn, get_user(name) |> user_to_map())
+
         _ ->
           conn
           |> json(%{"error" => "A user with that name already exists!"})
@@ -52,15 +53,17 @@ defmodule FnApiWeb.Admin.UserController do
         nil ->
           conn
           |> json(%{"error" => "No user with that name exists!"})
+
         user ->
           Repo.delete!(user)
           json(conn, %{"success" => "User deleted successfully!"})
-      end      
+      end
     end
   end
 
   def get(conn, params) do
     name = params["name"]
+
     if is_nil(name) do
       conn
       |> put_status(400)
@@ -70,17 +73,18 @@ defmodule FnApiWeb.Admin.UserController do
         nil ->
           conn
           |> json(%{"error" => "No user with that name exists!"})
-        user -> json(conn, user_to_map(user))
+
+        user ->
+          json(conn, user_to_map(user))
       end
     end
   end
 
   def get_all(conn, _params) do
     users =
-      Repo.all(from Tokens)
+      Repo.all(from(Tokens))
       |> users_to_map()
-    
+
     json(conn, users)
   end
 end
-                                                                                                               
