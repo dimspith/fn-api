@@ -23,7 +23,7 @@ defmodule FnApiWeb.AdminRouter do
     post "/create", Admin.UserManager, :create
     post "/delete", Admin.UserManager, :delete
     get "/get", Admin.UserManager, :get
-    get "/getAll", Admin.UserManager, :get_all
+    get "/get-all", Admin.UserManager, :get_all
   end
 
   import Phoenix.LiveDashboard.Router

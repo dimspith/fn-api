@@ -5,10 +5,10 @@ defmodule FnApiWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", FnApiWeb do
+  scope "/list/", FnApiWeb do
     pipe_through :api
-    get "/fetch", FetchBlacklist, :index
-    get "/latest", FetchLastUpdate, :index
+    get "/get", FetchBlacklist, :index
+    get "/last-update", FetchLastUpdate, :index
     post "/label", LabelDomain, :index
   end
 end
