@@ -7,9 +7,8 @@ defmodule FnApi.Database.Updates do
     case System.get_env("FNAPI_BLACKLIST") do
       nil -> Application.app_dir(:fn_api, "priv") <> "/blacklist"
       blacklist -> blacklist
-    end    
+    end
   end
-  
 
   defp get_curr_unix_time(), do: DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 

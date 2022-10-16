@@ -23,7 +23,7 @@ defmodule FnApiWeb.AdminRouter do
     post "/create", Admin.UserController, :create
     post "/delete", Admin.UserController, :delete
     get "/get", Admin.UserController, :get
-    get "/getAll", Admin.UserController, :get_all
+    get "/get-all", Admin.UserController, :get_all
   end
 
   scope "/labels", FnApiWeb do

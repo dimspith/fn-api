@@ -8,7 +8,6 @@ defmodule FnApiWeb.FetchBlacklist do
       _ -> send_all(conn)
     end
   end
-
   def send_all(conn) do
     json(conn, %{
       "sites" =>
@@ -28,7 +27,6 @@ defmodule FnApiWeb.FetchBlacklist do
           "insertions" => diff[:insert],
           "deletions" => diff[:delete]
         }) 
-
       :error ->
         json(conn, %{"error" => "Invalid checkpoint!"})
     end

@@ -26,6 +26,7 @@ defmodule FnApi.Database.Labelling do
 
   defp submit_label(uuid, params) do
     Logger.debug("Submitting Label!")
+
     Repo.insert!(
       %Labels{
         # uuid: Ecto.UUID.dump!(params["token"]),
@@ -40,6 +41,7 @@ defmodule FnApi.Database.Labelling do
 
   defp resubmit_label(uuid, previous_label, params) do
     Logger.debug("Resubmitting Label!")
+
     updated_label =
       Ecto.Changeset.change(previous_label,
         isFake: convert!(params["is-fake"]),
@@ -80,13 +82,13 @@ defmodule FnApi.Database.Labelling do
   def insert_label(params) do
     if uuid = valid_token?(params["token"]) do
       domain = params["domain"]
-      
+
       tags = get_tags(params)
 
       # If the domain was already submitted by the user, resubmit the current label
       case previous_label = is_label_resubmission?(uuid, domain) do
         nil -> submit_label(uuid, params)
-        _  -> resubmit_label(uuid, previous_label, params)
+        _ -> resubmit_label(uuid, previous_label, params)
       end
 
       insert_tags(uuid, tags, params)

@@ -7,7 +7,7 @@ defmodule FnApi.Database.Utils do
   require Ecto.UUID
   require Logger
   alias FnApi.Database.{Repo, Tokens}
-  
+
   def convert!("true"), do: true
   def convert!("false"), do: false
   def convert!(num), do: String.to_integer(num)
@@ -18,7 +18,7 @@ defmodule FnApi.Database.Utils do
       :error -> false
     end
   end
-  
+
   def token_exists?(token) do
     case Repo.exists?(from(t in Tokens, select: t.uuid == ^token)) do
       true -> token
