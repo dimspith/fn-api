@@ -26,6 +26,11 @@ defmodule FnApiWeb.AdminRouter do
     get "/getAll", Admin.UserController, :get_all
   end
 
+  scope "/labels", FnApiWeb do
+    pipe_through :api
+    get "/get-all", Admin.LabelController, :get_labels
+  end
+  
   import Phoenix.LiveDashboard.Router
   scope "/" do
     pipe_through [:browser]
