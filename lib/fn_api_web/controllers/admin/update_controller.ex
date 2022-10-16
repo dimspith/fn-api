@@ -1,4 +1,4 @@
-defmodule FnApiWeb.Admin.UpdateBlacklist do
+defmodule FnApiWeb.Admin.UpdateController do
   use FnApiWeb, :controller
   require Logger
   import FnApi.Database.Updates
