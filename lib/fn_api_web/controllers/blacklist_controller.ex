@@ -1,8 +1,8 @@
-defmodule FnApiWeb.FetchBlacklist do
+defmodule FnApiWeb.BlacklistController do
   use FnApiWeb, :controller
   import FnApi.Database.Updates
 
-  def index(conn, params) do
+  def fetch_blacklist(conn, params) do
     case params do
       %{"lastupdate" => unix_time} -> send_diffs(conn, unix_time)
       _ -> send_all(conn)

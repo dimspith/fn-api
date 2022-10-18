@@ -7,8 +7,8 @@ defmodule FnApiWeb.Router do
 
   scope "/list/", FnApiWeb do
     pipe_through :api
-    get "/get", FetchBlacklist, :index
-    get "/last-update", FetchLastUpdate, :index
-    post "/label", LabelDomain, :index
+    get "/get", BlacklistController, :fetch_blacklist
+    get "/last-checkpoint", CheckpointController, :last_checkpoint
+    post "/label", LabelController, :submit_label
   end
 end
