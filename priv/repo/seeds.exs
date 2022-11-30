@@ -10,10 +10,10 @@ alias FnApi.Database.{Repo, Insertions, Checkpoints}
 chunk_size = 500
 
 default_domains =
-case System.get_env("FNAPI_DEFAULTS") do
-  nil -> Application.app_dir(:fn_api, "priv") <> "/defaults/default_domains"
-  defaults -> defaults <> "/default_domains"
-end
+  case System.get_env("FNAPI_DEFAULTS") do
+    nil -> Application.app_dir(:fn_api, "priv") <> "/defaults/default_domains"
+    defaults -> defaults <> "/default_domains"
+  end
 
 curr_datetime = DateTime.now!("Etc/UTC") |> DateTime.to_unix()
 
@@ -33,4 +33,3 @@ end)
 end)
 
 Repo.insert(%Checkpoints{date: curr_datetime})
-

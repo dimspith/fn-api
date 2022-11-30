@@ -8,6 +8,7 @@ defmodule FnApiWeb.BlacklistController do
       _ -> send_all(conn)
     end
   end
+
   def send_all(conn) do
     json(conn, %{
       "sites" =>
@@ -22,11 +23,13 @@ defmodule FnApiWeb.BlacklistController do
     case Integer.parse(unix_time) do
       {date, _} ->
         diff = generate_diff(date)
+
         json(conn, %{
           "checkpoint" => get_last_update(),
           "insertions" => diff[:insert],
           "deletions" => diff[:delete]
-        }) 
+        })
+
       :error ->
         json(conn, %{"error" => "Invalid checkpoint!"})
     end

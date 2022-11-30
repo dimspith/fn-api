@@ -7,7 +7,7 @@ defmodule FnApi.Database.Repo.Migrations.CreateLabels do
       add :domain, :string
       add :isFake, :boolean, default: false, null: false
       add :comments, :string
-      
+
       timestamps()
     end
   end

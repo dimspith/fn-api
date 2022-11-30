@@ -6,8 +6,9 @@ defmodule FnApi.Release do
   @app :fn_api
   @start_apps [:logger, :ecto, :ecto_sqlite3]
 
-  def seed_path, do: System.get_env("FNAPI_SEEDS") || Application.app_dir(:fn_api, "priv" <> "/repo/seeds/")
-  
+  def seed_path,
+    do: System.get_env("FNAPI_SEEDS") || Application.app_dir(:fn_api, "priv" <> "/repo/seeds/")
+
   def migrate do
     ## Run migrations
     init(@app, @start_apps)
@@ -19,9 +20,9 @@ defmodule FnApi.Release do
 
   def seeds do
     ## Run seeds
-    
+
     init(@app, @start_apps)
-    
+
     run_seed_scripts(seed_path())
 
     stop()
@@ -29,13 +30,14 @@ defmodule FnApi.Release do
 
   def run_seed_scripts(seed_script) do
     ## Run all seed scripts in the specified directory
-    
-    IO.puts "Running seed script #{seed_script}.."
+
+    IO.puts("Running seed script #{seed_script}..")
+
     "#{seed_path()}/*.exs"
     |> Path.wildcard()
     |> Enum.sort()
     |> Enum.each(fn x ->
-      IO.puts "Running seed script #{x}.."
+      IO.puts("Running seed script #{x}..")
       Code.eval_file(x)
     end)
   end
@@ -47,20 +49,21 @@ defmodule FnApi.Release do
 
   defp init(app, start_apps) do
     ## Initialize application
-    IO.puts "Loading app.."
+    IO.puts("Loading app..")
     :ok = load_app()
 
-    IO.puts "Starting dependencies.."
+    IO.puts("Starting dependencies..")
     Enum.each(start_apps, &Application.ensure_all_started/1)
 
-    IO.puts "Starting repos.."
+    IO.puts("Starting repos..")
+
     app
     |> Application.get_env(:ecto_repos, [])
-    |> Enum.each(&(&1.start_link(pool_size: 1)))
+    |> Enum.each(& &1.start_link(pool_size: 1))
   end
 
   defp stop do
-    IO.puts "Success!"
+    IO.puts("Success!")
     :init.stop()
   end
 

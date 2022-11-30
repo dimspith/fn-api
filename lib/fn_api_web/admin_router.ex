@@ -30,8 +30,9 @@ defmodule FnApiWeb.AdminRouter do
     pipe_through :api
     get "/get-all", Admin.LabelController, :get_labels
   end
-  
+
   import Phoenix.LiveDashboard.Router
+
   scope "/" do
     pipe_through [:browser]
     live_dashboard "/dashboard", metrics: FnApiWeb.Telemetry

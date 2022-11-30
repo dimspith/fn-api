@@ -9,15 +9,18 @@ import Config
 
 # Start the phoenix server if environment is set and running in a release
 # if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
-  # config :fn_api, FnApiWeb.Endpoint, server: true
-  # config :fn_api, FnApiWeb.AdminEndpoint, server: true
+# config :fn_api, FnApiWeb.Endpoint, server: true
+# config :fn_api, FnApiWeb.AdminEndpoint, server: true
 # end
 
 if config_env() == :prod do
-  
   # Database path relative to project root
   database_path = System.get_env("DATABASE_PATH") || "db/fnapi.db"
-  secret_key_base = System.get_env("SECRET_KEY_BASE") || "ehsLE9d+kXqrvvEDqT3jmiWGrZE2A27pQltXilsl2TrWiYhn+oQ1RSYTfaor4yBEv"
+
+  secret_key_base =
+    System.get_env("SECRET_KEY_BASE") ||
+      "ehsLE9d+kXqrvvEDqT3jmiWGrZE2A27pQltXilsl2TrWiYhn+oQ1RSYTfaor4yBEv"
+
   live_view_salt = System.get_env("LIVE_VIEW_SALT") || "d8dnNoWXbMNDZCT1gnk5VRC2EZOvugrH"
   host = System.get_env("PHX_HOST") || "localhost"
 

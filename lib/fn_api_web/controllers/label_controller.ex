@@ -11,4 +11,3 @@ defmodule FnApiWeb.LabelController do
     json(conn, res)
   end
 end
-
