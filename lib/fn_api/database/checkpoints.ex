@@ -1,4 +1,4 @@
-defmodule FnApi.Checkpoints do
+defmodule FnApi.Database.Checkpoints do
   use Ecto.Schema
   import Ecto.Changeset
 

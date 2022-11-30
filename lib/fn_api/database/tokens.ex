@@ -1,7 +1,7 @@
-defmodule FnApi.Tokens do
+defmodule FnApi.Database.Tokens do
   use Ecto.Schema
   import Ecto.Changeset
-  
+
   @primary_key {:uuid, :binary_id, autogenerate: true}
   schema "tokens" do
     field :fullName, :string

@@ -5,12 +5,18 @@ defmodule FnApi.MixProject do
     [
       app: :fn_api,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        fn_api: [
+          include_executables_for: [:unix]
+        ]
+      ],
+      default_release: :fn_api
     ]
   end
 
@@ -20,7 +26,7 @@ defmodule FnApi.MixProject do
   def application do
     [
       mod: {FnApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -37,12 +43,13 @@ defmodule FnApi.MixProject do
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:ecto_sqlite3, ">= 0.0.0"},
+      {:phoenix_live_view, "~> 0.17.11"},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:file_system, "~> 0.2.10"}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -55,11 +62,17 @@ defmodule FnApi.MixProject do
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "sql.get_users": ["run --no-compile priv/repo/scripts/get_users.exs"], 
-      "sql.insert_user": ["run --no-compile priv/repo/scripts/insert_user.exs"], 
+      "ecto.setup": [
+        "ecto.create",
+        "ecto.migrate",
+        "run -e \"FnApi.Release.run_seed_scripts('priv/repo/seeds/')\""
+      ],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "fnapi.release": ["cmd rm release.zip", "cmd ./scripts/make_release.sh"],
+      "fnapi.docker.build": ["cmd docker build -t fn_api --progress=plain ."],
+      "fnapi.docker.run": ["cmd docker run --rm -p 3000:3000 -p 4000:4000 fn_api"],
+      "fnapi.clean": ["cmd ./scripts/clean.sh"]
     ]
   end
 end

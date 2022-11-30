@@ -1,4 +1,4 @@
-defmodule FnApi.Repo.Migrations.CreateLabels do
+defmodule FnApi.Database.Repo.Migrations.CreateLabels do
   use Ecto.Migration
 
   def change do
@@ -7,7 +7,7 @@ defmodule FnApi.Repo.Migrations.CreateLabels do
       add :domain, :string
       add :isFake, :boolean, default: false, null: false
       add :comments, :string
-      
+
       timestamps()
     end
   end

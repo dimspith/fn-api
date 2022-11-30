@@ -9,15 +9,17 @@ defmodule FnApi.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      FnApi.Repo,
-      # Start the filesystem watcher
-      {FnApi.FileWatcher, dirs: ["priv/lists/changes"]},
+      FnApi.Database.Repo,
+      # Write the current blacklist to a file
+      {Task, fn -> FnApi.Database.Updates.update_blacklist_file() end},
       # Start the Telemetry supervisor
       FnApiWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: FnApi.PubSub},
       # Start the Endpoint (http/https)
-      FnApiWeb.Endpoint
+      FnApiWeb.Endpoint,
+      # Start the Admin Endpoint (http/https)
+      FnApiWeb.AdminEndpoint
       # Start a worker by calling: FnApi.Worker.start_link(arg)
       # {FnApi.Worker, arg}
     ]

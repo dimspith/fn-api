@@ -1,15 +1,15 @@
-defmodule FnApi.Insertions do
+defmodule FnApi.Database.Deletions do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "insertions" do
+  schema "deletions" do
     field :date, :integer
     field :domain, :string
   end
 
   @doc false
-  def changeset(insertions, attrs) do
-    insertions
+  def changeset(deletions, attrs) do
+    deletions
     |> cast(attrs, [:domain, :date])
     |> validate_required([:domain, :date])
   end
